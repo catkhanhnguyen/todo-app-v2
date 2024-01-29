@@ -5,8 +5,10 @@ import Todo from '../model'
 
 interface Props {
   todos: Todo[]
+  handleDelete: (id: number) => void
+  handleEdit
 }
-const TodoList = ({ todos }: Props) => {
+const TodoList = ({ todos, handleEdit, handleDelete }: Props) => {
   return (
     <Box
       sx={{
@@ -62,13 +64,13 @@ const TodoList = ({ todos }: Props) => {
 
           <Box>
             <Tooltip className="tooltip_delete" title="Edit">
-              <IconButton>
+              <IconButton onClick={() => handleEdit(todo)}>
                 <BorderColor sx={{ fontSize: '18px', color: '' }} />
               </IconButton>
             </Tooltip>
 
             <Tooltip title="Delete">
-              <IconButton>
+              <IconButton onClick={() => handleDelete(todo.id)}>
                 <Delete sx={{ fontSize: '18px' }} />
               </IconButton>
             </Tooltip>
