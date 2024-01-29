@@ -5,10 +5,11 @@ import Todo from '../model'
 
 interface Props {
   todos: Todo[]
+  handleCheck: (id: number, completed: boolean) => void
   handleDelete: (id: number) => void
   handleEdit
 }
-const TodoList = ({ todos, handleEdit, handleDelete }: Props) => {
+const TodoList = ({ todos, handleCheck, handleEdit, handleDelete }: Props) => {
   return (
     <Box
       sx={{
@@ -51,7 +52,7 @@ const TodoList = ({ todos, handleEdit, handleDelete }: Props) => {
             }}
           >
             <Tooltip title={todo.completed ? 'true' : 'false'}>
-              <IconButton>
+              <IconButton onClick={() => handleCheck(todo.id, todo.completed)}>
                 {todo.completed ? (
                   <CheckBox sx={{ fontSize: '18px' }} />
                 ) : (

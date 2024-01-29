@@ -25,10 +25,10 @@
       "id": "bba4"
     },
     {
+      "id": "5103",
       "text": "supermarket",
       "color": "#FFD3C0",
-      "completed": true,
-      "id": "5103"
+      "completed": true
     }
   ]
 }

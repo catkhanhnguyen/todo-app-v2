@@ -69,6 +69,21 @@ const App: React.FC = () => {
   };
 
 
+  const handleCheck = (id: number, completed: boolean) => {
+    const currentTodo = todos.find((todo) => todo.id === id);
+    const updateCurrentTodo = { id: id, text: currentTodo?.text, color: currentTodo?.color, completed: !completed };
+  
+    axios.put(`http://localhost:3000/todos/${id}`, updateCurrentTodo)
+      .then(() => {
+        const updatedTodos: Todo[] = todos.map((todo) =>
+          todo.id === id ? { ...todo, completed: !completed } : todo
+        );
+        setTodos(updatedTodos);
+      })
+      .catch(error => console.error('Error updating todo in the database:', error));
+  };
+  
+
 
 
   return (
@@ -97,7 +112,7 @@ const App: React.FC = () => {
         <InputField input={input} setInput={setInput} handleSubmit={handleSubmit} />
 
         {/* Todo list */}
-        <TodoList todos={todos} handleEdit={handleEdit} handleDelete={handleDelete} />
+        <TodoList todos={todos} handleCheck={handleCheck} handleEdit={handleEdit} handleDelete={handleDelete} />
       </Box>
     </Container>
   )
