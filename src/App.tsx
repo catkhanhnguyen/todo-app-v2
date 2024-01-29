@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import './App.css'
-import { Box, Container, Typography } from '@mui/material';
-import InputField from './components/inputField';
-import Todo from './model';
+import { Box, Container, Typography } from '@mui/material'
+import InputField from './components/inputField'
+import Todo from './model'
+import TodoList from './components/TodoList'
+import pastelColors from './assets/color'
 
 const App: React.FC = () => {
 
@@ -16,6 +18,9 @@ const App: React.FC = () => {
       setInput('')
     }
   }
+
+  const generateRandomColor = () =>
+    pastelColors[Math.floor(Math.random() * pastelColors.length)];
 
 
   return (
@@ -35,10 +40,16 @@ const App: React.FC = () => {
           boxShadow: 3,
           p: 4
         }}>
-        <Typography textAlign="center" m={2} variant="h5">
-          TODO APP
-        </Typography>
-        <InputField input={input} setInput={setInput} handleSubmit={handleSubmit} />
+          {/* Title */}
+          <Typography textAlign="center" m={2} variant="h5">
+            TODO APP
+          </Typography>
+          
+          {/* Input field */}
+          <InputField input={input} setInput={setInput} handleSubmit={handleSubmit} />
+        
+          {/* Todo list */}
+          <TodoList todos={todos}/>
       </Box>
     </Container>
   )
