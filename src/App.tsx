@@ -9,6 +9,8 @@ import pastelColors from './assets/color'
 
 const App: React.FC = () => {
 
+  const baseUrl = '/todos';
+
   const [input, setInput] = useState<string>('')
   const [todos, setTodos] = useState<Todo[]>([]);
   const [modalText, setModalText] = useState<string>('')
@@ -17,7 +19,7 @@ const App: React.FC = () => {
     pastelColors[Math.floor(Math.random() * pastelColors.length)];
 
   useEffect(() => {
-    axios.get('http://localhost:3000/todos')
+    axios.get(`${baseUrl}`)
       .then(response => {
         setTodos(response.data);
       })
@@ -35,7 +37,7 @@ const App: React.FC = () => {
         const randomColor = generateRandomColor();
         const newTodo = { id: Date.now(), text: input, color: randomColor, completed: false }
 
-        axios.post('http://localhost:3000/todos', newTodo)
+        axios.post(`${baseUrl}`, newTodo)
           .then((response) => {
             const createdTodo: Todo = response.data; // Extracting todo data from AxiosResponse
             setTodos([...todos, createdTodo]);
@@ -52,14 +54,17 @@ const App: React.FC = () => {
   }
 
   const handleDelete = (id: number) => {
-    const updatedTodos = todos.filter((todo) => todo.id !== id);
-    setTodos(updatedTodos);
-
-    axios.delete(`http://localhost:3000/todos/${id}`)
+    // Make the delete request to the server
+    axios.delete(`${baseUrl}/${id}`)
       .then(() => {
+        // If the deletion is successful, update the local state
+        const updatedTodos: Todo[] = todos.filter((todo) => todo.id !== id);
+        setTodos(updatedTodos);
+  
         console.log(`Todo with ID ${id} deleted successfully.`);
       })
-      .catch((error) => {
+      .catch(error => {
+        // Handle errors, log to the console
         if (error.response && error.response.status === 404) {
           console.error(`Todo with ID ${id} not found on the server.`);
         } else {
@@ -67,21 +72,25 @@ const App: React.FC = () => {
         }
       });
   };
+  
 
 
   const handleCheck = (id: number, completed: boolean) => {
     const currentTodo = todos.find((todo) => todo.id === id);
     const updateCurrentTodo = { id: id, text: currentTodo?.text, color: currentTodo?.color, completed: !completed };
-  
-    axios.put(`http://localhost:3000/todos/${id}`, updateCurrentTodo)
+    
+    axios.put(`${baseUrl}/${id}`, updateCurrentTodo)
       .then(() => {
         const updatedTodos: Todo[] = todos.map((todo) =>
           todo.id === id ? { ...todo, completed: !completed } : todo
         );
         setTodos(updatedTodos);
       })
-      .catch(error => console.error('Error updating todo in the database:', error));
+      .catch(error => {
+        console.error(`Error updating todo with ID ${id} in the database:`, error.response);
+      });
   };
+  
   
 
 
