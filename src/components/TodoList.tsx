@@ -7,7 +7,7 @@ interface Props {
   todos: Todo[]
   handleCheck: (id: number, completed: boolean) => void
   handleDelete: (id: number) => void
-  handleEdit
+  handleEdit: (todo: Todo) => void
 }
 const TodoList = ({ todos, handleCheck, handleEdit, handleDelete }: Props) => {
   return (

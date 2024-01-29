@@ -6,6 +6,7 @@ import InputField from './components/inputField'
 import Todo from './model'
 import TodoList from './components/TodoList'
 import pastelColors from './assets/color'
+import FormModal from './components/FormModal'
 
 const App: React.FC = () => {
 
@@ -13,7 +14,7 @@ const App: React.FC = () => {
 
   const [input, setInput] = useState<string>('')
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [modalText, setModalText] = useState<string>('')
+  const [editTodo, setEditTodo] = useState<string>('')
 
   const generateRandomColor = () =>
     pastelColors[Math.floor(Math.random() * pastelColors.length)];
@@ -39,7 +40,7 @@ const App: React.FC = () => {
 
         axios.post(`${baseUrl}`, newTodo)
           .then((response) => {
-            const createdTodo: Todo = response.data; // Extracting todo data from AxiosResponse
+            const createdTodo: Todo = response.data;
             setTodos([...todos, createdTodo]);
           })
           .catch(error => console.error('Error saving todo to database:', error))
@@ -54,26 +55,16 @@ const App: React.FC = () => {
   }
 
   const handleDelete = (id: number) => {
-    // Make the delete request to the server
     axios.delete(`${baseUrl}/${id}`)
       .then(() => {
-        // If the deletion is successful, update the local state
         const updatedTodos: Todo[] = todos.filter((todo) => todo.id !== id);
         setTodos(updatedTodos);
-  
-        console.log(`Todo with ID ${id} deleted successfully.`);
       })
       .catch(error => {
-        // Handle errors, log to the console
-        if (error.response && error.response.status === 404) {
-          console.error(`Todo with ID ${id} not found on the server.`);
-        } else {
-          console.error(`Error deleting todo with ID ${id} from the database:`, error);
-        }
-      });
+        console.error(`Error deleting todo with ID ${id} from the database:`, error)
+      })
   };
   
-
 
   const handleCheck = (id: number, completed: boolean) => {
     const currentTodo = todos.find((todo) => todo.id === id);
@@ -90,9 +81,9 @@ const App: React.FC = () => {
         console.error(`Error updating todo with ID ${id} in the database:`, error.response);
       });
   };
-  
-  
 
+  
+  
 
 
   return (
@@ -122,6 +113,9 @@ const App: React.FC = () => {
 
         {/* Todo list */}
         <TodoList todos={todos} handleCheck={handleCheck} handleEdit={handleEdit} handleDelete={handleDelete} />
+
+        {/* Modal */}
+        <FormModal open={Boolean(editTodo)}/>
       </Box>
     </Container>
   )
