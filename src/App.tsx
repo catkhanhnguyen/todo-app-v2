@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 import './App.css'
 import { Box, Container, Typography } from '@mui/material'
 import InputField from './components/inputField'
@@ -16,12 +17,26 @@ const App: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (input) {
-      const randomColor = generateRandomColor();
-      setTodos([...todos, {id: Date.now(), text: input, color: randomColor, completed: false}])
+    if (input.trim() !== '') {
+      const existedTodo = todos.find((todo) => todo.text === input)
+
+      if (existedTodo) {
+        console.log('Already existed')
+      } else {
+        const randomColor = generateRandomColor();
+        const newTodo = { id: Date.now(), text: input, color: randomColor, completed: false }
+        axios.post('http://localhost:3000/todos', newTodo)
+          .then((response) => {
+            const createdTodo: Todo = response.data; // Extracting todo data from AxiosResponse
+            setTodos([...todos, createdTodo]);
+          })
+          .catch(error => console.error('Error saving todo to database:', error))
+      }
       setInput('')
     }
+    
   }
+
 
 
 
@@ -42,16 +57,16 @@ const App: React.FC = () => {
           boxShadow: 3,
           p: 4
         }}>
-          {/* Title */}
-          <Typography textAlign="center" m={2} variant="h5">
-            TODO APP
-          </Typography>
-          
-          {/* Input field */}
-          <InputField input={input} setInput={setInput} handleSubmit={handleSubmit} />
-        
-          {/* Todo list */}
-          <TodoList todos={todos}/>
+        {/* Title */}
+        <Typography textAlign="center" m={2} variant="h5">
+          TODO APP
+        </Typography>
+
+        {/* Input field */}
+        <InputField input={input} setInput={setInput} handleSubmit={handleSubmit} />
+
+        {/* Todo list */}
+        <TodoList todos={todos} />
       </Box>
     </Container>
   )
