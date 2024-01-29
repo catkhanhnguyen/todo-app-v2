@@ -11,16 +11,18 @@ const App: React.FC = () => {
   const [input, setInput] = useState<string>('')
   const [todos, setTodos] = useState<Todo[]>([]);
 
+  const generateRandomColor = () =>
+    pastelColors[Math.floor(Math.random() * pastelColors.length)];
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (input) {
-      setTodos([...todos, {id: Date.now(), text: input, completed: false}])
+      const randomColor = generateRandomColor();
+      setTodos([...todos, {id: Date.now(), text: input, color: randomColor, completed: false}])
       setInput('')
     }
   }
 
-  const generateRandomColor = () =>
-    pastelColors[Math.floor(Math.random() * pastelColors.length)];
 
 
   return (

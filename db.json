@@ -1,0 +1,34 @@
+{
+    "todos": [
+      {
+        "text": "Shopping",
+        "color": "#B2DBBF",
+        "completed": false,
+        "id": "1"
+      },
+      {
+        "text": "Homework",
+        "color": "#FFE1B6",
+        "completed": true,
+        "id": "2"
+      },
+      {
+        "text": "Feed kittens",
+        "color": "#FFD3C0",
+        "completed": true,
+        "id": "6c7b"
+      },
+      {
+        "text": "Breakfast",
+        "color": "#D4A5A5",
+        "completed": false,
+        "id": "bba4"
+      },
+      {
+        "text": "supermarket",
+        "color": "#FFD3C0",
+        "completed": true,
+        "id": "5103"
+      }
+    ]
+  }
