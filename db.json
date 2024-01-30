@@ -6,7 +6,10 @@
       "color": "#B2DBBF",
       "completed": false,
       "location": "Grocery Store",
-      "members": ["John", "Alice"],
+      "members": [
+        "John",
+        "Alice"
+      ],
       "time": "09:00 AM"
     },
     {
@@ -15,7 +18,10 @@
       "color": "#FFE1B6",
       "completed": true,
       "location": "Home",
-      "members": ["Alice", "Bob"],
+      "members": [
+        "Alice",
+        "Bob"
+      ],
       "time": "02:00 PM"
     },
     {
@@ -24,7 +30,10 @@
       "color": "#FFD3C0",
       "completed": true,
       "location": "Pet Store",
-      "members": ["Bob", "Charlie"],
+      "members": [
+        "Bob",
+        "Charlie"
+      ],
       "time": "04:30 PM"
     },
     {
@@ -33,7 +42,9 @@
       "color": "#D4A5A5",
       "completed": false,
       "location": "Kitchen",
-      "members": ["Eve"],
+      "members": [
+        "Eve"
+      ],
       "time": "08:00 AM"
     },
     {
@@ -42,8 +53,17 @@
       "color": "#9B8BBA",
       "completed": false,
       "location": "Supermarket",
-      "members": ["Charlie", "John"],
+      "members": [
+        "Charlie",
+        "John"
+      ],
       "time": "10:30 AM"
+    },
+    {
+      "id": "1706597889300",
+      "text": "hnjjj",
+      "color": "#FFD3C0",
+      "completed": false
     }
   ]
 }

@@ -2,7 +2,6 @@ import { Box, IconButton, Tooltip } from '@mui/material'
 import { BorderColor, CheckBox, CheckBoxOutlineBlank, Delete } from '@mui/icons-material'
 import React from 'react'
 import Todo from '../../../model'
-import FormModal from './FormModal'
 import { Link } from 'react-router-dom'
 
 interface Props {

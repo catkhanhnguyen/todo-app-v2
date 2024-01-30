@@ -4,10 +4,23 @@ import Todo from '../../model'
 import pastelColors from '../../assets/color'
 import { Box, Container, Typography } from '@mui/material'
 import { useParams } from 'react-router-dom'
+import DetailForm from './components/DetailForm'
 
 const DetailPage = () => {
   const baseUrl = '/todos'
   const  { id } = useParams()
+
+  const [todos, setTodos] = useState<Todo[]>([])
+
+  const selectedTodo = todos.find(todo => todo.id === id) 
+
+  useEffect(() => {
+    axios.get(baseUrl)
+      .then(response => {
+        setTodos(response.data);
+      })
+      .catch(error => console.error('Error fetching todos from the database:', error))
+  }, [baseUrl])
 
 
   return (
@@ -31,7 +44,7 @@ const DetailPage = () => {
         <Typography textAlign="center" m={2} variant="h5">
           TODO { id }
         </Typography>
-        
+        {selectedTodo && <DetailForm todo={selectedTodo} />}
       </Box>
     </Container>
   )

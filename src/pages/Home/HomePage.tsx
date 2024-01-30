@@ -14,7 +14,7 @@ const HomePage = () => {
     const [input, setInput] = useState<string>('')
     const [todos, setTodos] = useState<Todo[]>([])
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
-    const [editTodo, setEditTodo] = useState<Todo>({ id: '', text: '', color: '', completed: false })
+    const [editTodo, setEditTodo] = useState<Todo>({ id: '', text: '', color: '', completed: false, location: '', member: [], time: '' })
     const [isOpenToast, setIsOpenToast] = useState<boolean>(false)
     const [toastMessage, setToastMessage] = useState<string>('')
 
