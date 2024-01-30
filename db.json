@@ -10,30 +10,24 @@
       "text": "Homework",
       "color": "#FFE1B6",
       "completed": true,
-      "id": 2
+      "id": "2"
     },
     {
       "text": "Feed kittens",
       "color": "#FFD3C0",
       "completed": true,
-      "id": 3
+      "id": "3"
     },
     {
       "text": "Breakfast",
       "color": "#D4A5A5",
       "completed": false,
-      "id": 4
+      "id": "4"
     },
     {
-      "id": 5,
-      "text": "supermarket",
-      "color": "#FFD3C0",
-      "completed": true
-    },
-    {
-      "id": "1706524103637",
-      "text": "bhbbh",
-      "color": "#FFD3C0",
+      "id": "1706581757190",
+      "text": "Supermarket",
+      "color": "#9B8BBA",
       "completed": false
     }
   ]

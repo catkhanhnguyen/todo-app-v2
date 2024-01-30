@@ -13,8 +13,10 @@ const App: React.FC = () => {
   const baseUrl = '/todos';
 
   const [input, setInput] = useState<string>('')
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [editTodo, setEditTodo] = useState<string>('')
+  const [todos, setTodos] = useState<Todo[]>([])
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+  const [editTodo, setEditTodo] = useState<Todo>({ id: '', text: '', color: '', completed: false })
+  const [handleSaveEdit, SetHandleSaveEdit] = useState<string>('')
 
   const generateRandomColor = () =>
     pastelColors[Math.floor(Math.random() * pastelColors.length)];
@@ -36,7 +38,7 @@ const App: React.FC = () => {
         console.log('Already existed')
       } else {
         const randomColor = generateRandomColor();
-        const newTodo = { id: Date.now(), text: input, color: randomColor, completed: false }
+        const newTodo = { id: Date.now().toString(), text: input, color: randomColor, completed: false }
 
         axios.post(`${baseUrl}`, newTodo)
           .then((response) => {
@@ -51,10 +53,29 @@ const App: React.FC = () => {
   }
 
   const handleEdit = (todo: Todo) => {
-
+    setIsOpenModal(true)
+    setEditTodo({
+      ...todo
+    })
   }
 
-  const handleDelete = (id: number) => {
+  const handleSaveEditTodo = (text: string) => {
+    const updatedTodo = { ...editTodo, text: text };
+  
+    axios.put(`${baseUrl}/${editTodo.id}`, updatedTodo)
+      .then(() => {
+        const updatedTodos: Todo[] = todos.map((todo) =>
+          todo.id === editTodo.id ? { ...todo, text: text } : todo
+        );
+        setTodos(updatedTodos)
+        setIsOpenModal(false)
+      })
+      .catch(error => console.error('Error updating todo:', error))
+  }
+  
+
+
+  const handleDelete = (id: string) => {
     axios.delete(`${baseUrl}/${id}`)
       .then(() => {
         const updatedTodos: Todo[] = todos.filter((todo) => todo.id !== id);
@@ -64,12 +85,12 @@ const App: React.FC = () => {
         console.error(`Error deleting todo with ID ${id} from the database:`, error)
       })
   };
-  
 
-  const handleCheck = (id: number, completed: boolean) => {
+
+  const handleCheck = (id: string, completed: boolean) => {
     const currentTodo = todos.find((todo) => todo.id === id);
     const updateCurrentTodo = { id: id, text: currentTodo?.text, color: currentTodo?.color, completed: !completed };
-    
+
     axios.put(`${baseUrl}/${id}`, updateCurrentTodo)
       .then(() => {
         const updatedTodos: Todo[] = todos.map((todo) =>
@@ -82,8 +103,8 @@ const App: React.FC = () => {
       });
   };
 
-  
-  
+
+
 
 
   return (
@@ -115,7 +136,13 @@ const App: React.FC = () => {
         <TodoList todos={todos} handleCheck={handleCheck} handleEdit={handleEdit} handleDelete={handleDelete} />
 
         {/* Modal */}
-        <FormModal open={Boolean(editTodo)}/>
+        <FormModal
+          key={editTodo?.id}
+          open={isOpenModal}
+          initialText={editTodo?.text}
+          setIsOpenModal={setIsOpenModal}
+          setHandleSaveEdit={handleSaveEditTodo}
+        />
       </Box>
     </Container>
   )

@@ -2,11 +2,12 @@ import { Box, IconButton, Tooltip } from '@mui/material'
 import { BorderColor, CheckBox, CheckBoxOutlineBlank, Delete } from '@mui/icons-material'
 import React from 'react'
 import Todo from '../model'
+import FormModal from './FormModal'
 
 interface Props {
   todos: Todo[]
-  handleCheck: (id: number, completed: boolean) => void
-  handleDelete: (id: number) => void
+  handleCheck: (id: string, completed: boolean) => void
+  handleDelete: (id: string) => void
   handleEdit: (todo: Todo) => void
 }
 const TodoList = ({ todos, handleCheck, handleEdit, handleDelete }: Props) => {
