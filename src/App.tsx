@@ -7,6 +7,7 @@ import Todo from './model'
 import TodoList from './components/TodoList'
 import pastelColors from './assets/color'
 import FormModal from './components/FormModal'
+import Toast from './components/Toast'
 
 const App: React.FC = () => {
 
@@ -16,7 +17,9 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([])
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [editTodo, setEditTodo] = useState<Todo>({ id: '', text: '', color: '', completed: false })
-  const [handleSaveEdit, SetHandleSaveEdit] = useState<string>('')
+  const [isOpenToast, setIsOpenToast] = useState<boolean>(false)
+  const [toastMessage, setToastMessage] = useState<string>('')
+
 
   const generateRandomColor = () =>
     pastelColors[Math.floor(Math.random() * pastelColors.length)];
@@ -35,7 +38,7 @@ const App: React.FC = () => {
       const existedTodo = todos.find((todo) => todo.text === input)
 
       if (existedTodo) {
-        console.log('Already existed')
+        openToast('Todo already exists! Fulfill it now?!')
       } else {
         const randomColor = generateRandomColor();
         const newTodo = { id: Date.now().toString(), text: input, color: randomColor, completed: false }
@@ -48,6 +51,8 @@ const App: React.FC = () => {
           .catch(error => console.error('Error saving todo to database:', error))
       }
       setInput('')
+    } else {
+      openToast('Todo is invalid: Please enter a non-empty string!!')
     }
 
   }
@@ -73,7 +78,6 @@ const App: React.FC = () => {
       .catch(error => console.error('Error updating todo:', error))
   }
   
-
 
   const handleDelete = (id: string) => {
     axios.delete(`${baseUrl}/${id}`)
@@ -103,7 +107,14 @@ const App: React.FC = () => {
       });
   };
 
+  const openToast = (message: string) => {
+    setIsOpenToast(true)
+    setToastMessage(message)
+  }
 
+  const closeToast = () => {
+    setIsOpenToast(false)
+  }
 
 
 
@@ -142,6 +153,13 @@ const App: React.FC = () => {
           initialText={editTodo?.text}
           setIsOpenModal={setIsOpenModal}
           setHandleSaveEdit={handleSaveEditTodo}
+        />
+
+        {/* Toast */}
+        <Toast
+          isOpenToast={isOpenToast}
+          toastMessage={toastMessage}
+          closeToast={closeToast}
         />
       </Box>
     </Container>
