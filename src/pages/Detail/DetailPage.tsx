@@ -3,13 +3,14 @@ import axios from 'axios'
 import Todo from '../../model'
 import pastelColors from '../../assets/color'
 import { Box, Container, Modal, Typography } from '@mui/material'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import DetailForm from './components/DetailForm'
 import FormModal from './components/FormModal'
 
 const DetailPage = () => {
   const baseUrl = '/todos'
   const  { id } = useParams()
+  const navigate = useNavigate()
 
   const [todos, setTodos] = useState<Todo[]>([])
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
@@ -44,7 +45,11 @@ const DetailPage = () => {
     }
     
     setIsOpenModal(false)
-  };
+  }
+
+  const handleBack = () => {
+    navigate('/')
+  }
 
   return (
     <Container disableGutters maxWidth={false}
@@ -69,7 +74,7 @@ const DetailPage = () => {
         </Typography>
 
         {/* Detail Form */}
-        {selectedTodo && <DetailForm todo={selectedTodo} handleEdit={handleEdit} />}
+        {selectedTodo && <DetailForm todo={selectedTodo} handleEdit={handleEdit} handleBack={handleBack}/>}
 
         {/* Modal */}
         <FormModal open={isOpenModal} setIsOpenModal={setIsOpenModal} handleSaveEdit={handleSaveEdit}/>
