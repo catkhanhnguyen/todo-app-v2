@@ -5,7 +5,7 @@ import Todo from '../../../model'
 interface Props {
   open: boolean
   setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>
-  handleSaveEdit
+  handleSaveEdit: (text: string) => void
 }
 
 const FormModal = ({ open, setIsOpenModal, handleSaveEdit }: Props) => {

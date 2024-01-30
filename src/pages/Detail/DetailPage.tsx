@@ -30,7 +30,7 @@ const DetailPage = () => {
   const handleEdit = () => {
     setIsOpenModal(true)
     if (selectedTodo) {
-      setEditedModal(selectedTodo.text || ''); // Set the initial text for the modal
+      setEditedModal(selectedTodo.text || ''); 
     }
   }
 
@@ -57,8 +57,8 @@ const DetailPage = () => {
       }}>
       <Box
         sx={{
-          backgroundColor: '#303952',
-          color: 'white',
+          backgroundColor: '#b8e994',
+          color: '#222f3e',
           borderRadius: '10px',
           boxShadow: 3,
           p: 4
