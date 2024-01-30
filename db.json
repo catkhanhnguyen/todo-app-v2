@@ -1,34 +1,49 @@
 {
   "todos": [
     {
+      "id": "1",
       "text": "Shopping",
       "color": "#B2DBBF",
       "completed": false,
-      "id": "1"
+      "location": "Grocery Store",
+      "members": ["John", "Alice"],
+      "time": "09:00 AM"
     },
     {
+      "id": "2",
       "text": "Homework",
       "color": "#FFE1B6",
       "completed": true,
-      "id": "2"
+      "location": "Home",
+      "members": ["Alice", "Bob"],
+      "time": "02:00 PM"
     },
     {
+      "id": "3",
       "text": "Feed kittens",
       "color": "#FFD3C0",
       "completed": true,
-      "id": "3"
+      "location": "Pet Store",
+      "members": ["Bob", "Charlie"],
+      "time": "04:30 PM"
     },
     {
+      "id": "4",
       "text": "Breakfast",
       "color": "#D4A5A5",
       "completed": false,
-      "id": "4"
+      "location": "Kitchen",
+      "members": ["Eve"],
+      "time": "08:00 AM"
     },
     {
       "id": "1706581757190",
       "text": "Supermarket",
       "color": "#9B8BBA",
-      "completed": false
+      "completed": false,
+      "location": "Supermarket",
+      "members": ["Charlie", "John"],
+      "time": "10:30 AM"
     }
   ]
 }

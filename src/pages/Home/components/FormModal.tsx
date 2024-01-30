@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, OutlinedInput } from '@mui/material'
 import React, { useState } from 'react'
-import Todo from '../model'
+import Todo from '../../../model'
 
 interface Props {
   open: boolean
