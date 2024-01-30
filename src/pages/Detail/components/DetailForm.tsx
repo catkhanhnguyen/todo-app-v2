@@ -1,25 +1,18 @@
-import { Box, IconButton, Tooltip } from '@mui/material';
+import { Box, IconButton, Tooltip, Typography } from '@mui/material';
 import { BorderColor, CheckBox, CheckBoxOutlineBlank, Delete } from '@mui/icons-material';
 import React from 'react';
 import Todo from '../../../model';
 
 interface Props {
-  todo: Todo;
+  todo: Todo
+  handleEdit: () => void
 }
 
-const DetailForm = ({ todo }: Props) => {
-  
-  const handleCheck = (id: string, completed: boolean) => {
-    // Xử lý khi check todo
-  };
+const DetailForm = ({ todo, handleEdit }: Props) => {
 
-  const handleEdit = (todo: Todo) => {
-    // Xử lý khi edit todo
-  };
-
-  const handleDelete = (id: string) => {
-    // Xử lý khi delete todo
-  };
+  const capitalizeFirstLetter = (text: string) => {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  }
 
   return (
     <Box
@@ -42,7 +35,7 @@ const DetailForm = ({ todo }: Props) => {
         }
       }}
     >
-      {/* Dùng Object.entries để map qua các trường của todo */}
+
       {Object.entries(todo).map(([fieldName, fieldValue], index) => (
         <Box
           key={index}
@@ -62,20 +55,24 @@ const DetailForm = ({ todo }: Props) => {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
+              color: '#2C3A47',
+              ml: 1,
             }}
           >
-            {`${fieldName}: ${fieldValue}`}
+            <Typography>
+              {`${capitalizeFirstLetter(fieldName)}: ${fieldValue}`}
+            </Typography>
           </Box>
 
           <Box>
             <Tooltip className="tooltip_delete" title="Edit">
-              <IconButton onClick={() => handleEdit(todo)}>
+              <IconButton onClick={() => handleEdit()}>
                 <BorderColor sx={{ fontSize: '18px', color: '' }} />
               </IconButton>
             </Tooltip>
 
             <Tooltip title="Delete">
-              <IconButton onClick={() => handleDelete(todo.id)}>
+              <IconButton>
                 <Delete sx={{ fontSize: '18px' }} />
               </IconButton>
             </Tooltip>

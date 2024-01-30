@@ -1,4 +1,4 @@
-import { Box, IconButton, Tooltip } from '@mui/material'
+import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import { BorderColor, CheckBox, CheckBoxOutlineBlank, Delete } from '@mui/icons-material'
 import React from 'react'
 import Todo from '../../../model'
@@ -32,54 +32,55 @@ const TodoList = ({ todos, handleCheck, handleEdit, handleDelete }: Props) => {
         }
       }}>
       {todos.map((todo, index) => (
-        <Link to={`/todo/${todo.id}`} style={{ textDecoration: 'none' }}>
+        <Box
+          key={index}
+          sx={{
+            padding: '8px',
+            margin: '4px',
+            backgroundColor: todo.color,
+            color: '#303952',
+            borderRadius: '4px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <Box
-            key={index}
             sx={{
-              padding: '8px',
-              margin: '4px',
-              backgroundColor: todo.color,
-              color: '#303952',
-              borderRadius: '4px',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}
           >
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Tooltip title={todo.completed ? 'true' : 'false'}>
-                <IconButton onClick={() => handleCheck(todo.id, todo.completed)}>
-                  {todo.completed ? (
-                    <CheckBox sx={{ fontSize: '18px' }} />
-                  ) : (
-                    <CheckBoxOutlineBlank sx={{ fontSize: '18px' }} />
-                  )}
-                </IconButton>
-              </Tooltip>
-              {todo.text}
-            </Box>
-
-            <Box>
-              <Tooltip className="tooltip_delete" title="Edit">
-                <IconButton onClick={() => handleEdit(todo)}>
-                  <BorderColor sx={{ fontSize: '18px', color: '' }} />
-                </IconButton>
-              </Tooltip>
-
-              <Tooltip title="Delete">
-                <IconButton onClick={() => handleDelete(todo.id)}>
-                  <Delete sx={{ fontSize: '18px' }} />
-                </IconButton>
-              </Tooltip>
-            </Box>
+            <Tooltip title={todo.completed ? 'true' : 'false'}>
+              <IconButton onClick={() => handleCheck(todo.id, todo.completed)}>
+                {todo.completed ? (
+                  <CheckBox sx={{ fontSize: '18px' }} />
+                ) : (
+                  <CheckBoxOutlineBlank sx={{ fontSize: '18px' }} />
+                )}
+              </IconButton>
+            </Tooltip>
+            
+            <Link to={`/todo/${todo.id}`} style={{ color: '#2C3A47', textDecoration: 'none' }}>
+              <Typography>{todo.text}</Typography>
+            </Link>
           </Box>
-        </Link>
+
+          <Box>
+            <Tooltip className="tooltip_delete" title="Edit">
+              <IconButton onClick={() => handleEdit(todo)}>
+                <BorderColor sx={{ fontSize: '18px', color: '' }} />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Delete">
+              <IconButton onClick={() => handleDelete(todo.id)}>
+                <Delete sx={{ fontSize: '18px' }} />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Box>
       ))}
     </Box>
   )

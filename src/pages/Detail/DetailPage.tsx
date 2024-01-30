@@ -2,26 +2,49 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Todo from '../../model'
 import pastelColors from '../../assets/color'
-import { Box, Container, Typography } from '@mui/material'
+import { Box, Container, Modal, Typography } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import DetailForm from './components/DetailForm'
+import FormModal from './components/FormModal'
 
 const DetailPage = () => {
   const baseUrl = '/todos'
   const  { id } = useParams()
 
   const [todos, setTodos] = useState<Todo[]>([])
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+  const [editModal, setEditedModal] = useState<string>('')
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const selectedTodo = todos.find(todo => todo.id === id) 
+
 
   useEffect(() => {
     axios.get(baseUrl)
       .then(response => {
-        setTodos(response.data);
+        setTodos(response.data)
+        setSelectedTodo(response.data.find(todo => todo.id === id) || null)
       })
       .catch(error => console.error('Error fetching todos from the database:', error))
   }, [baseUrl])
 
+  const handleEdit = () => {
+    setIsOpenModal(true)
+    if (selectedTodo) {
+      setEditedModal(selectedTodo.text || ''); // Set the initial text for the modal
+    }
+  }
+
+  const handleSaveEdit = (text: string) => {
+    if (selectedTodo) {
+      const updatedTodo: Todo = { ...selectedTodo, text }
+
+      axios.put(`${baseUrl}/${selectedTodo?.id}`, updatedTodo)
+
+      setSelectedTodo(updatedTodo);
+    }
+    
+    setIsOpenModal(false)
+  };
 
   return (
     <Container disableGutters maxWidth={false}
@@ -44,7 +67,12 @@ const DetailPage = () => {
         <Typography textAlign="center" m={2} variant="h5">
           TODO { id }
         </Typography>
-        {selectedTodo && <DetailForm todo={selectedTodo} />}
+
+        {/* Detail Form */}
+        {selectedTodo && <DetailForm todo={selectedTodo} handleEdit={handleEdit} />}
+
+        {/* Modal */}
+        <FormModal open={isOpenModal} setIsOpenModal={setIsOpenModal} handleSaveEdit={handleSaveEdit}/>
       </Box>
     </Container>
   )
