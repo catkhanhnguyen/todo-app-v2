@@ -28,12 +28,6 @@ const DetailPage = () => {
       .catch(error => console.error('Error fetching todos from the database:', error))
   }, [baseUrl])
 
-  const handleEdit = () => {
-    setIsOpenModal(true)
-    if (selectedTodo) {
-      setEditedModal(selectedTodo.text || ''); 
-    }
-  }
 
   const handleSaveEdit = (text: string) => {
     if (selectedTodo) {
@@ -74,7 +68,7 @@ const DetailPage = () => {
         </Typography>
 
         {/* Detail Form */}
-        {selectedTodo && <DetailForm todo={selectedTodo} handleEdit={handleEdit} handleBack={handleBack}/>}
+        {selectedTodo && <DetailForm todo={selectedTodo} handleBack={handleBack}/>}
 
         {/* Modal */}
         <FormModal open={isOpenModal} setIsOpenModal={setIsOpenModal} handleSaveEdit={handleSaveEdit}/>

@@ -3,8 +3,7 @@ import { Box, Button, TextField } from '@mui/material';
 import Todo from '../../../model';
 
 interface Props {
-  todo: Todo;
-  handleEdit: () => void
+  todo: Todo
   handleBack: () => void
   handleSave: (fieldValues: { [key: string]: string }) => void
 }
