@@ -5,7 +5,7 @@ import Todo from '../../../model'
 interface Props {
   todo: Todo
   handleBack: () => void
-  handleSave: (fieldValues: { [key: string]: string }) => void
+  handleSave: (fieldValues: {[key: string]: string}) => void
 }
 
 const DetailForm = ({ todo, handleBack, handleSave }: Props) => {
@@ -30,9 +30,6 @@ const DetailForm = ({ todo, handleBack, handleSave }: Props) => {
     }))
   }
 
-  const handleSaveClick = () => {
-    handleSave(fieldValues)
-  }
 
   return (
     <Box
@@ -94,7 +91,7 @@ const DetailForm = ({ todo, handleBack, handleSave }: Props) => {
         <Button variant="outlined" onClick={handleBack}>
           Back
         </Button>
-        <Button variant="contained" onClick={handleSaveClick}>
+        <Button variant="contained" onClick={(e) => handleSave(fieldValues)}>
           Save
         </Button>
       </Box>
