@@ -16,19 +16,19 @@ const TodoList = ({ todos, handleCheck, handleEdit, handleDelete }: Props) => {
       sx={{
         height: '300px',
         mt: 2,
-        overflowY: 'auto',
+        overflow:"auto",
         scrollbarWidth: 'thin',
         '&::-webkit-scrollbar': {
           width: '0.4em',
         },
         '&::-webkit-scrollbar-track': {
-          background: "#888",
+          background: "#f1f1f1",
         },
         '&::-webkit-scrollbar-thumb': {
-          backgroundColor: '#f1f1f1',
+          backgroundColor: '#888',
         },
         '&::-webkit-scrollbar-thumb:hover': {
-          background: 'white'
+          background: '#555'
         }
       }}>
       {todos.map((todo, index) => (

@@ -1,57 +1,57 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Button, TextField } from '@mui/material';
-import Todo from '../../../model';
+import React, { useState, useEffect } from 'react'
+import { Box, Button, TextField } from '@mui/material'
+import Todo from '../../../model'
 
 interface Props {
-  todo: Todo;
-  handleBack: () => void;
-  handleSave: (fieldValues: { [key: string]: string }) => void;
+  todo: Todo
+  handleBack: () => void
+  handleSave: (fieldValues: { [key: string]: string }) => void
 }
 
 const DetailForm = ({ todo, handleBack, handleSave }: Props) => {
-  const [fieldValues, setFieldValues] = useState<{ [key: string]: string }>({});
+  const [fieldValues, setFieldValues] = useState<{ [key: string]: string }>({})
 
   const capitalizeFirstLetter = (text: string) => {
-    return text.charAt(0).toUpperCase() + text.slice(1);
+    return text.charAt(0).toUpperCase() + text.slice(1)
   };
 
   useEffect(() => {
-    const initialFieldValues: { [key: string]: string } = {};
+    const initialFieldValues: { [key: string]: string } = {}
     Object.entries(todo).forEach(([fieldName, fieldValue]) => {
-      initialFieldValues[fieldName] = fieldValue?.toString() || '';
-    });
+      initialFieldValues[fieldName] = fieldValue?.toString() || ''
+    })
     setFieldValues(initialFieldValues);
-  }, [todo]);
+  }, [todo])
 
   const handleChange = (fieldName: string, value: string) => {
     setFieldValues((prevFieldValues) => ({
       ...prevFieldValues,
       [fieldName]: value,
-    }));
-  };
+    }))
+  }
 
   const handleSaveClick = () => {
-    handleSave(fieldValues);
-  };
+    handleSave(fieldValues)
+  }
 
   return (
     <Box
       sx={{
         height: '300px',
-        overflowY: 'auto',
+        overflow:"auto",
         scrollbarWidth: 'thin',
         '&::-webkit-scrollbar': {
           width: '0.4em',
         },
         '&::-webkit-scrollbar-track': {
-          background: '#888',
+          background: "#f1f1f1",
         },
         '&::-webkit-scrollbar-thumb': {
-          backgroundColor: '#f1f1f1',
+          backgroundColor: '#888',
         },
         '&::-webkit-scrollbar-thumb:hover': {
-          background: 'white',
-        },
+          background: '#555'
+        }
       }}
     >
       <form>

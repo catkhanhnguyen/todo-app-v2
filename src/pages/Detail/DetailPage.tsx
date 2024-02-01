@@ -55,7 +55,7 @@ const DetailPage = () => {
       }}>
       <Box
         sx={{
-          backgroundColor: '#4b6584',
+          backgroundColor: '#FFE1B6',
           color: '#222f3e',
           borderRadius: '10px',
           boxShadow: 3,
