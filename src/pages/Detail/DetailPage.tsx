@@ -21,6 +21,7 @@ const DetailPage = () => {
       })
       .catch(error => console.error('Error fetching todos from the database:', error))
   }, [baseUrl, id])
+  
 
   const handleSave = (fieldValues: { [key: string]: string }) => {
     if (selectedTodo) {
