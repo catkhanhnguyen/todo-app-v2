@@ -1,25 +1,24 @@
-import React, { useState, useEffect } from 'react'
-import { Box, Button, TextField } from '@mui/material'
-import Todo from '../../../model'
-import { DatePicker } from '@mui/x-date-pickers'
+import React, { useState, useEffect } from 'react';
+import { Box, Button, TextField } from '@mui/material';
+import Todo from '../../../model';
 
 interface Props {
-  todo: Todo
-  handleBack: () => void
-  handleSave: (fieldValues: { [key: string]: string }) => void
+  todo: Todo;
+  handleBack: () => void;
+  handleSave: (fieldValues: { [key: string]: string }) => void;
 }
 
 const DetailForm = ({ todo, handleBack, handleSave }: Props) => {
-  const [fieldValues, setFieldValues] = useState<{ [key: string]: string }>({})
+  const [fieldValues, setFieldValues] = useState<{ [key: string]: string }>({});
 
   const capitalizeFirstLetter = (text: string) => {
-    return text.charAt(0).toUpperCase() + text.slice(1)
-  }
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  };
 
   useEffect(() => {
     const initialFieldValues: { [key: string]: string } = {};
     Object.entries(todo).forEach(([fieldName, fieldValue]) => {
-      initialFieldValues[fieldName] = fieldValue?.toString() || ''
+      initialFieldValues[fieldName] = fieldValue?.toString() || '';
     });
     setFieldValues(initialFieldValues);
   }, [todo]);
@@ -67,15 +66,17 @@ const DetailForm = ({ todo, handleBack, handleSave }: Props) => {
               mt: 2,
             }}
           >
-            {/* Use DatePicker for date input */}
-            {fieldName.toLowerCase().includes('date') ? (
-              <DatePicker
-                label={capitalizeFirstLetter(fieldName)}
-                value={new Date(fieldValue)} // Assuming fieldValue is a valid date string
-                onChange={(date) => handleChange(fieldName, date?.toISOString() || '')}
-                sx={{ mr: 2 }}
+            {fieldName.toLowerCase().includes('time') ? (
+              <TextField
+                type="datetime-local"
+                variant="outlined"
+                value={fieldValue}
+                fullWidth
+                sx={{ mr: 2, color: 'white' }}
+                onChange={(e) => handleChange(fieldName, e.target.value)}
               />
             ) : (
+
               <TextField
                 label={capitalizeFirstLetter(fieldName)}
                 variant="outlined"

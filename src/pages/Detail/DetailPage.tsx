@@ -17,33 +17,32 @@ const DetailPage = () => {
     axios.get(baseUrl)
       .then(response => {
         setTodos(response.data);
-        setSelectedTodo(response.data.find(todo => todo.id === id) || null);
+        setSelectedTodo(response.data.find(todo => todo.id === id) || null)
       })
       .catch(error => console.error('Error fetching todos from the database:', error));
-  }, [baseUrl, id]);
+  }, [baseUrl, id])
 
-  const handleSave = async (fieldValues: { [key: string]: string }) => {
-    try {
-      if (selectedTodo) {
-        const updatedTodo: Todo = { ...selectedTodo, ...fieldValues };
-
-        // Update the todo on the UI
-        setSelectedTodo(updatedTodo);
-
-        // Make a PUT request to update the todo in the API
-        await axios.put(`${baseUrl}/${selectedTodo.id}`, updatedTodo);
-
-        navigate('/');
-      }
-    } catch (error) {
-      console.error('Error saving todo:', error.message);
-      // Handle the error, show an error message, etc.
+  const handleSave = (fieldValues: { [key: string]: string }) => {
+    if (selectedTodo) {
+      const updatedTodo: Todo = { ...selectedTodo, ...fieldValues }
+  
+      setSelectedTodo(updatedTodo)
+  
+      axios
+        .put(`${baseUrl}/${selectedTodo.id}`, updatedTodo)
+        .then(() => {
+          navigate('/')
+        })
+        .catch((error) => {
+          console.error('Error saving todo:', error.message);
+        })
     }
-  };
+  }
+  
 
   const handleBack = () => {
-    navigate('/');
-  };
+    navigate('/')
+  }
 
   return (
     <Container disableGutters maxWidth={false}
@@ -56,7 +55,7 @@ const DetailPage = () => {
       }}>
       <Box
         sx={{
-          backgroundColor: '#3c6382',
+          backgroundColor: '#4b6584',
           color: '#222f3e',
           borderRadius: '10px',
           boxShadow: 3,
