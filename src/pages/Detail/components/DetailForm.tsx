@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Box, Button, TextField } from '@mui/material';
-import Todo from '../../../model';
+import React, { useState, useEffect } from 'react'
+import { Box, Button, TextField } from '@mui/material'
+import Todo from '../../../model'
+import { DatePicker } from '@mui/x-date-pickers'
 
 interface Props {
   todo: Todo
@@ -9,16 +10,16 @@ interface Props {
 }
 
 const DetailForm = ({ todo, handleBack, handleSave }: Props) => {
-  const [fieldValues, setFieldValues] = useState<{ [key: string]: string }>({});
+  const [fieldValues, setFieldValues] = useState<{ [key: string]: string }>({})
 
   const capitalizeFirstLetter = (text: string) => {
-    return text.charAt(0).toUpperCase() + text.slice(1);
-  };
+    return text.charAt(0).toUpperCase() + text.slice(1)
+  }
 
-  React.useEffect(() => {
+  useEffect(() => {
     const initialFieldValues: { [key: string]: string } = {};
     Object.entries(todo).forEach(([fieldName, fieldValue]) => {
-      initialFieldValues[fieldName] = fieldValue?.toString() || '';
+      initialFieldValues[fieldName] = fieldValue?.toString() || ''
     });
     setFieldValues(initialFieldValues);
   }, [todo]);
@@ -27,12 +28,12 @@ const DetailForm = ({ todo, handleBack, handleSave }: Props) => {
     setFieldValues((prevFieldValues) => ({
       ...prevFieldValues,
       [fieldName]: value,
-    }))
-  }
+    }));
+  };
 
   const handleSaveClick = () => {
     handleSave(fieldValues);
-  }
+  };
 
   return (
     <Box
@@ -66,14 +67,24 @@ const DetailForm = ({ todo, handleBack, handleSave }: Props) => {
               mt: 2,
             }}
           >
-            <TextField
-              label={capitalizeFirstLetter(fieldName)}
-              variant="outlined"
-              value={fieldValue}
-              fullWidth
-              sx={{ mr: 2, color: 'white' }}
-              onChange={(e) => handleChange(fieldName, e.target.value)}
-            />
+            {/* Use DatePicker for date input */}
+            {fieldName.toLowerCase().includes('date') ? (
+              <DatePicker
+                label={capitalizeFirstLetter(fieldName)}
+                value={new Date(fieldValue)} // Assuming fieldValue is a valid date string
+                onChange={(date) => handleChange(fieldName, date?.toISOString() || '')}
+                sx={{ mr: 2 }}
+              />
+            ) : (
+              <TextField
+                label={capitalizeFirstLetter(fieldName)}
+                variant="outlined"
+                value={fieldValue}
+                fullWidth
+                sx={{ mr: 2, color: 'white' }}
+                onChange={(e) => handleChange(fieldName, e.target.value)}
+              />
+            )}
           </Box>
         ))}
       </form>
