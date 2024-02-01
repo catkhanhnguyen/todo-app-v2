@@ -12,6 +12,7 @@ const DetailPage = () => {
 
   const [todos, setTodos] = useState<Todo[]>([])
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null)
+  const [fieldValues, setFieldValues] = useState<{ [key: string]: string }>({})
 
   useEffect(() => {
     axios.get(baseUrl)
@@ -21,6 +22,22 @@ const DetailPage = () => {
       })
       .catch(error => console.error('Error fetching todos from the database:', error))
   }, [baseUrl, id])
+
+  useEffect(() => {
+    const initialFieldValues: { [key: string]: string } = {}
+    Object.entries(selectedTodo || {}).forEach(([fieldName, fieldValue]) => {
+      initialFieldValues[fieldName] = fieldValue?.toString()
+    });
+    setFieldValues(initialFieldValues);
+  }, [selectedTodo])
+
+  const handleChange = (fieldName: string, value: string) => {
+    setFieldValues((prevFieldValues) => ({
+      ...prevFieldValues,
+      [fieldName]: value,
+    }))
+  }
+
   
 
   const handleSave = (fieldValues: { [key: string]: string }) => {
@@ -68,7 +85,13 @@ const DetailPage = () => {
         </Typography>
 
         {/* Detail Form */}
-        {selectedTodo && <DetailForm todo={selectedTodo} handleBack={handleBack} handleSave={handleSave} />}
+        {selectedTodo &&
+        <DetailForm
+          fieldValues={fieldValues}
+          handleChange={handleChange}
+          handleBack={handleBack}
+          handleSave={handleSave}
+        />}
       </Box>
     </Container>
   );

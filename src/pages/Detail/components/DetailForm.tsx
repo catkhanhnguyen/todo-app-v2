@@ -5,32 +5,19 @@ import FormControl from '@mui/material/FormControl'
 import FormLabel from '@mui/material/FormLabel'
 
 interface Props {
-  todo: Todo;
-  handleBack: () => void;
-  handleSave: (fieldValues: { [key: string]: string }) => void;
+  fieldValues: {[key: string]: string}
+  handleChange: (fieldName: string, value: string) => void
+  handleBack: () => void
+  handleSave: (fieldValues: { [key: string]: string }) => void
 }
 
-const DetailForm = ({ todo, handleBack, handleSave }: Props) => {
-  const [fieldValues, setFieldValues] = useState<{ [key: string]: string }>({});
+const DetailForm = ({ fieldValues, handleChange, handleBack, handleSave }: Props) => {
 
   const capitalizeFirstLetter = (text: string) => {
-    return text.charAt(0).toUpperCase() + text.slice(1);
-  };
+    return text.charAt(0).toUpperCase() + text.slice(1)
+  }
 
-  useEffect(() => {
-    const initialFieldValues: { [key: string]: string } = {};
-    Object.entries(todo).forEach(([fieldName, fieldValue]) => {
-      initialFieldValues[fieldName] = fieldValue?.toString() || '';
-    });
-    setFieldValues(initialFieldValues);
-  }, [todo]);
 
-  const handleChange = (fieldName: string, value: string) => {
-    setFieldValues((prevFieldValues) => ({
-      ...prevFieldValues,
-      [fieldName]: value,
-    }));
-  };
 
   return (
     <Box
