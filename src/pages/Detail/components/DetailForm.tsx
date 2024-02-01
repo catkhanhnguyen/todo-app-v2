@@ -66,7 +66,7 @@ const DetailForm = ({ todo, handleBack, handleSave }: Props) => {
               mt: 2,
             }}
           >
-            {fieldName.toLowerCase().includes('time') ? (
+            {fieldName.includes('time') ? (
               <TextField
                 type="datetime-local"
                 variant="outlined"

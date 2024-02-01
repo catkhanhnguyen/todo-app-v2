@@ -6,12 +6,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import DetailForm from './components/DetailForm';
 
 const DetailPage = () => {
-  const baseUrl = '/todos';
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const baseUrl = '/todos'
+  const { id } = useParams()
+  const navigate = useNavigate()
 
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([])
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null)
 
   useEffect(() => {
     axios.get(baseUrl)
@@ -19,7 +19,7 @@ const DetailPage = () => {
         setTodos(response.data);
         setSelectedTodo(response.data.find(todo => todo.id === id) || null)
       })
-      .catch(error => console.error('Error fetching todos from the database:', error));
+      .catch(error => console.error('Error fetching todos from the database:', error))
   }, [baseUrl, id])
 
   const handleSave = (fieldValues: { [key: string]: string }) => {
@@ -34,7 +34,7 @@ const DetailPage = () => {
           navigate('/')
         })
         .catch((error) => {
-          console.error('Error saving todo:', error.message);
+          console.error('Error saving todo:', error.message)
         })
     }
   }
