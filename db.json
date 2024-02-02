@@ -58,11 +58,11 @@
     },
     {
       "id": "1706600619445",
-      "text": "Hello",
+      "text": "Helloo",
       "color": "#B5EAD7",
-      "completed": "false",
-      "location": "HN",
-      "member": "A, B",
+      "completed": false,
+      "location": "HNoi",
+      "member": "A",
       "time": "2024-02-16T00:00"
     }
   ]

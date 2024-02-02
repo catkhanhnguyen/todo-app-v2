@@ -4,7 +4,7 @@ interface Todo{
     color: string,
     completed: boolean,
     location: string,
-    member: [],
+    member: string[],
     time: string
 }
 

@@ -91,8 +91,16 @@ const HomePage = () => {
 
   const handleCheck = (id: string, completed: boolean) => {
     const currentTodo = todos.find((todo) => todo.id === id);
-    const updateCurrentTodo = { id: id, text: currentTodo?.text, color: currentTodo?.color, completed: !completed, location: currentTodo?.location, member: currentTodo?.member, time: currentTodo?.time };
-
+    const updateCurrentTodo = { 
+      id: id,
+      text: currentTodo?.text,
+      color: currentTodo?.color,
+      completed: !completed,
+      location: currentTodo?.location,
+      member: currentTodo?.member,
+      time: currentTodo?.time
+    };
+  
     axios.put(`${baseUrl}/${id}`, updateCurrentTodo)
       .then(() => {
         const updatedTodos: Todo[] = todos.map((todo) =>
@@ -104,6 +112,7 @@ const HomePage = () => {
         console.error(`Error updating todo with ID ${id} in the database:`, error.response);
       });
   };
+  
 
   const openToast = (message: string) => {
     setIsOpenToast(true)

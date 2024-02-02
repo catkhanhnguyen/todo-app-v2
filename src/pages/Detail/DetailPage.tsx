@@ -17,19 +17,21 @@ const DetailPage = () => {
   useEffect(() => {
     axios.get(baseUrl)
       .then(response => {
-        setTodos(response.data);
-        setSelectedTodo(response.data.find(todo => todo.id === id) || null)
+        const todosData = response.data;
+        setTodos(todosData);
+        
+        const selectedTodoData = todosData.find(todo => todo.id === id) || null;
+        setSelectedTodo(selectedTodoData)
+        
+        const initialFieldValues: { [key: string]: string } = {};
+        Object.entries(selectedTodoData || {}).forEach(([fieldName, fieldValue]) => {
+          initialFieldValues[fieldName] = fieldValue?.toString() || ''
+        })
+        setFieldValues(initialFieldValues)
       })
       .catch(error => console.error('Error fetching todos from the database:', error))
-  }, [baseUrl, id])
-
-  useEffect(() => {
-    const initialFieldValues: { [key: string]: string } = {}
-    Object.entries(selectedTodo || {}).forEach(([fieldName, fieldValue]) => {
-      initialFieldValues[fieldName] = fieldValue?.toString()
-    });
-    setFieldValues(initialFieldValues);
-  }, [selectedTodo])
+  }, [baseUrl, id, setTodos, setSelectedTodo, setFieldValues])
+  
 
   const handleChange = (fieldName: string, value: string) => {
     setFieldValues((prevFieldValues) => ({
@@ -38,24 +40,27 @@ const DetailPage = () => {
     }))
   }
 
-  
-
   const handleSave = (fieldValues: { [key: string]: string }) => {
     if (selectedTodo) {
-      const updatedTodo: Todo = { ...selectedTodo, ...fieldValues }
+      const updatedTodo: Todo = { 
+        ...selectedTodo, 
+        ...fieldValues,
+        completed: fieldValues.completed === "true"
+      };
   
-      setSelectedTodo(updatedTodo)
+      setSelectedTodo(updatedTodo);
   
       axios
         .put(`${baseUrl}/${selectedTodo.id}`, updatedTodo)
         .then(() => {
-          navigate('/')
+          navigate('/');
         })
         .catch((error) => {
-          console.error('Error saving todo:', error.message)
-        })
+          console.error('Error saving todo:', error.message);
+        });
     }
-  }
+  };
+  
   
 
   const handleBack = () => {
