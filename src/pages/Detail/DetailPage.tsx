@@ -1,55 +1,89 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 import Todo from '../../model';
 import { Box, Container, Typography } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import DetailForm from './components/DetailForm';
 
-const DetailPage = () => {
-  const baseUrl = '/todos'
-  const { id } = useParams()
-  const navigate = useNavigate()
+interface TodoRequest {
+  id: string;
+  text: string;
+  color: string;
+  completed: boolean;
+  location: string;
+  member: string[];
+  time: string;
+}
 
-  const [todos, setTodos] = useState<Todo[]>([])
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null)
-  const [fieldValues, setFieldValues] = useState<{ [key: string]: string }>({})
+interface TodoResponse {
+  id: string;
+  text: string;
+  color: string;
+  completed: boolean;
+  location: string;
+  member: string[];
+  time: string;
+}
+
+const DetailPage = () => {
+  const baseUrl = '/todos';
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [fieldValues, setFieldValues] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    axios.get(baseUrl)
-      .then(response => {
+    // Tạo interceptor để xử lý lỗi
+    const axiosInterceptor = axios.interceptors.response.use(
+      (response: AxiosResponse<TodoResponse[]>) => response, // Trả về response nguyên gốc nếu không có lỗi
+      (error: AxiosError) => {
+        // Xử lý lỗi ở đây
+        console.error('Axios error:', error);
+        // Chuyển tiếp lỗi để xử lý ở các bước tiếp theo
+        return Promise.reject(error);
+      }
+    );
+
+    // Loại bỏ interceptor khi component unmounts
+    return () => {
+      axios.interceptors.response.eject(axiosInterceptor);
+    };
+  }, []);
+
+  useEffect(() => {
+    axios.get<TodoResponse[]>(baseUrl)
+      .then((response: AxiosResponse<TodoResponse[]>) => {
         const todosData = response.data;
-        setTodos(todosData);
-        
         const selectedTodoData = todosData.find(todo => todo.id === id) || null;
-        setSelectedTodo(selectedTodoData)
-        
+        setSelectedTodo(selectedTodoData);
+
         const initialFieldValues: { [key: string]: string } = {};
         Object.entries(selectedTodoData || {}).forEach(([fieldName, fieldValue]) => {
-          initialFieldValues[fieldName] = fieldValue?.toString() || ''
-        })
-        setFieldValues(initialFieldValues)
+          initialFieldValues[fieldName] = fieldValue?.toString() || '';
+        });
+        setFieldValues(initialFieldValues);
       })
-      .catch(error => console.error('Error fetching todos from the database:', error))
-  }, [baseUrl, id, setTodos, setSelectedTodo, setFieldValues])
-  
+      .catch(error => console.error('Error fetching todos from the database:', error));
+  }, [baseUrl, id]);
 
   const handleChange = (fieldName: string, value: string) => {
-    setFieldValues((prevFieldValues) => ({
+    setFieldValues(prevFieldValues => ({
       ...prevFieldValues,
       [fieldName]: value,
-    }))
-  }
+    }));
+  };
 
   const handleSave = (fieldValues: { [key: string]: string }) => {
     if (selectedTodo) {
-      const updatedTodo: Todo = { 
-        ...selectedTodo, 
+      const updatedTodo: TodoRequest = {
+        ...selectedTodo,
         ...fieldValues,
         completed: fieldValues.completed === "true"
       };
-  
+
       setSelectedTodo(updatedTodo);
-  
+
       axios
         .put(`${baseUrl}/${selectedTodo.id}`, updatedTodo)
         .then(() => {
@@ -60,12 +94,10 @@ const DetailPage = () => {
         });
     }
   };
-  
-  
 
   const handleBack = () => {
-    navigate('/')
-  }
+    navigate('/');
+  };
 
   return (
     <Container disableGutters maxWidth={false}
@@ -91,12 +123,12 @@ const DetailPage = () => {
 
         {/* Detail Form */}
         {selectedTodo &&
-        <DetailForm
-          fieldValues={fieldValues}
-          handleChange={handleChange}
-          handleBack={handleBack}
-          handleSave={handleSave}
-        />}
+          <DetailForm
+            fieldValues={fieldValues}
+            handleChange={handleChange}
+            handleBack={handleBack}
+            handleSave={handleSave}
+          />}
       </Box>
     </Container>
   );

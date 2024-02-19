@@ -6,10 +6,7 @@
       "color": "#B2DBBF",
       "completed": false,
       "location": "Grocery Store",
-      "members": [
-        "John",
-        "Alice"
-      ],
+      "members": "John,Alice",
       "time": "09:00 AM"
     },
     {
@@ -29,11 +26,8 @@
       "text": "Feed kittens",
       "color": "#FFD3C0",
       "completed": true,
+      "members": "",
       "location": "Pet Store",
-      "members": [
-        "Bob",
-        "Charlie"
-      ],
       "time": "04:30 PM"
     },
     {
@@ -41,19 +35,17 @@
       "text": "Breakfast",
       "color": "#D4A5A5",
       "completed": false,
+      "members": "John, David",
       "location": "Kitchen",
-      "time": "08:00 AM"
+      "time": "2024-02-07T19:53"
     },
     {
       "id": "1706581757190",
       "text": "Supermarket",
       "color": "#9B8BBA",
-      "completed": false,
+      "completed": true,
+      "members": "Alice, Bob",
       "location": "Supermarket",
-      "members": [
-        "Charlie",
-        "John"
-      ],
       "time": "10:30 AM"
     },
     {
@@ -62,7 +54,7 @@
       "color": "#B5EAD7",
       "completed": false,
       "location": "HNoi",
-      "member": "A",
+      "members": "A",
       "time": "2024-02-16T00:00"
     }
   ]
