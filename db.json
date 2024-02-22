@@ -42,28 +42,35 @@
       "color": "#D4A5A5",
       "completed": false,
       "location": "Kitchen",
+      "members": "Charlie,John",
       "time": "08:00 AM"
     },
     {
       "id": "1706581757190",
-      "text": "Supermarket",
+      "text": "Supermarkett",
       "color": "#9B8BBA",
-      "completed": false,
+      "completed": true,
       "location": "Supermarket",
-      "members": [
-        "Charlie",
-        "John"
-      ],
-      "time": "10:30 AM"
+      "members": "Charlie,John",
+      "time": "2024-02-07T09:39"
     },
     {
-      "id": "1706600619445",
-      "text": "Helloo",
-      "color": "#B5EAD7",
+      "id": "1706844984408",
+      "text": "Cafe",
+      "color": "#9B8BBA",
       "completed": false,
-      "location": "HNoi",
-      "member": "A",
-      "time": "2024-02-16T00:00"
+      "location": "",
+      "member": "a",
+      "time": ""
+    },
+    {
+      "id": "1708574375133",
+      "text": "Lunch",
+      "color": "#D4A5A5",
+      "completed": false,
+      "location": "",
+      "member": "",
+      "time": "2024-02-15T01:59"
     }
   ]
 }

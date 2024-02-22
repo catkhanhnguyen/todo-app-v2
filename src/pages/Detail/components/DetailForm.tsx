@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Box, Button, TextField, Radio, RadioGroup, FormControlLabel, FormGroup } from '@mui/material';
-import Todo from '../../../model'
 import FormControl from '@mui/material/FormControl'
 import FormLabel from '@mui/material/FormLabel'
 
@@ -16,8 +15,6 @@ const DetailForm = ({ fieldValues, handleChange, handleBack, handleSave }: Props
   const capitalizeFirstLetter = (text: string) => {
     return text.charAt(0).toUpperCase() + text.slice(1)
   }
-
-
 
   return (
     <Box
@@ -37,7 +34,7 @@ const DetailForm = ({ fieldValues, handleChange, handleBack, handleSave }: Props
         '&::-webkit-scrollbar-thumb:hover': {
           background: '#555',
         },
-      }}
+      }} 
     >
       <form>
         {Object.entries(fieldValues).map(([fieldName, fieldValue], index) => (

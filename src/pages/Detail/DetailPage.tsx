@@ -1,28 +1,59 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 import Todo from '../../model';
 import { Box, Container, Typography } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import DetailForm from './components/DetailForm';
+
+interface TodoRequest {
+  id: string
+  text: string
+  color: string
+  completed: boolean
+  location: string
+  member: string[]
+  time: string
+}
+
+interface TodoResponse {
+  id: string
+  text: string
+  color: string
+  completed: boolean
+  location: string
+  member: string[]
+  time: string
+}
 
 const DetailPage = () => {
   const baseUrl = '/todos'
   const { id } = useParams()
   const navigate = useNavigate()
 
-  const [todos, setTodos] = useState<Todo[]>([])
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null)
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [fieldValues, setFieldValues] = useState<{ [key: string]: string }>({})
 
   useEffect(() => {
-    axios.get(baseUrl)
-      .then(response => {
-        const todosData = response.data;
-        setTodos(todosData);
-        
-        const selectedTodoData = todosData.find(todo => todo.id === id) || null;
+    const axiosInterceptor = axios.interceptors.response.use(
+      (response: AxiosResponse<TodoResponse[]>) => response,
+      (error: AxiosError) => {
+        console.error('Axios error:', error);
+        return Promise.reject(error);
+      }
+    )
+
+    return () => {
+      axios.interceptors.response.eject(axiosInterceptor);
+    }
+  }, [])
+
+  useEffect(() => {
+    axios.get<TodoResponse[]>(baseUrl)
+      .then((response: AxiosResponse<TodoResponse[]>) => {
+        const todosData = response.data
+        const selectedTodoData = todosData.find(todo => todo.id === id) || null
         setSelectedTodo(selectedTodoData)
-        
+
         const initialFieldValues: { [key: string]: string } = {};
         Object.entries(selectedTodoData || {}).forEach(([fieldName, fieldValue]) => {
           initialFieldValues[fieldName] = fieldValue?.toString() || ''
@@ -30,11 +61,10 @@ const DetailPage = () => {
         setFieldValues(initialFieldValues)
       })
       .catch(error => console.error('Error fetching todos from the database:', error))
-  }, [baseUrl, id, setTodos, setSelectedTodo, setFieldValues])
-  
+  }, [baseUrl, id])
 
   const handleChange = (fieldName: string, value: string) => {
-    setFieldValues((prevFieldValues) => ({
+    setFieldValues(prevFieldValues => ({
       ...prevFieldValues,
       [fieldName]: value,
     }))
@@ -42,30 +72,28 @@ const DetailPage = () => {
 
   const handleSave = (fieldValues: { [key: string]: string }) => {
     if (selectedTodo) {
-      const updatedTodo: Todo = { 
-        ...selectedTodo, 
+      const updatedTodo: TodoRequest = {
+        ...selectedTodo,
         ...fieldValues,
         completed: fieldValues.completed === "true"
-      };
-  
+      }
+
       setSelectedTodo(updatedTodo);
-  
+
       axios
         .put(`${baseUrl}/${selectedTodo.id}`, updatedTodo)
         .then(() => {
-          navigate('/');
+          navigate('/')
         })
         .catch((error) => {
-          console.error('Error saving todo:', error.message);
-        });
+          console.error('Error saving todo:', error.message)
+        })
     }
   };
-  
-  
 
   const handleBack = () => {
     navigate('/')
-  }
+  };
 
   return (
     <Container disableGutters maxWidth={false}
@@ -91,12 +119,12 @@ const DetailPage = () => {
 
         {/* Detail Form */}
         {selectedTodo &&
-        <DetailForm
-          fieldValues={fieldValues}
-          handleChange={handleChange}
-          handleBack={handleBack}
-          handleSave={handleSave}
-        />}
+          <DetailForm
+            fieldValues={fieldValues}
+            handleChange={handleChange}
+            handleBack={handleBack}
+            handleSave={handleSave}
+          />}
       </Box>
     </Container>
   );

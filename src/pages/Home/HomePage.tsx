@@ -1,80 +1,106 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { Box, Container, Typography } from '@mui/material'
-import InputField from './components/inputField'
-import Todo from '../../model'
-import TodoList from './components/TodoList'
-import pastelColors from '../../assets/color'
-import FormModal from './components/FormModal'
-import Toast from './components/Toast'
+import React, { useEffect, useState } from 'react';
+import axios, { AxiosResponse, AxiosError } from 'axios';
+import Todo from '../../model';
+import { Box, Container, Typography } from '@mui/material';
+import InputField from './components/InputField';
+import TodoList from './components/TodoList';
+import pastelColors from '../../assets/color';
+import FormModal from './components/FormModal';
+import Toast from './components/Toast';
+
+
+interface TodoResponse {
+  id: string;
+  text: string;
+  color: string;
+  completed: boolean;
+  location: string;
+  member: string[];
+  time: string;
+}
 
 const HomePage = () => {
   const baseUrl = '/todos';
 
-  const [input, setInput] = useState<string>('')
-  const [todos, setTodos] = useState<Todo[]>([])
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
-  const [editTodo, setEditTodo] = useState<Todo>({ id: '', text: '', color: '', completed: false, location: '', member: [], time: '' })
-  const [isOpenToast, setIsOpenToast] = useState<boolean>(false)
-  const [toastMessage, setToastMessage] = useState<string>('')
-
+  const [input, setInput] = useState<string>('');
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [editTodo, setEditTodo] = useState<Todo>({ id: '', text: '', color: '', completed: false, location: '', member: [], time: '' });
+  const [isOpenToast, setIsOpenToast] = useState<boolean>(false);
+  const [toastMessage, setToastMessage] = useState<string>('');
 
   const generateRandomColor = () =>
     pastelColors[Math.floor(Math.random() * pastelColors.length)];
 
   useEffect(() => {
-    axios.get(`${baseUrl}`)
-      .then(response => {
-        setTodos(response.data);
+    const axiosInterceptor = axios.interceptors.response.use(
+      (response: AxiosResponse<TodoResponse[]>) => response,
+      (error: AxiosError) => {
+        console.error('Axios error:', error)
+        return Promise.reject(error)
+      }
+    );
+
+    return () => {
+      axios.interceptors.response.eject(axiosInterceptor)
+    }
+  }, [])
+
+  useEffect(() => {
+    axios.get<TodoResponse[]>(`${baseUrl}`)
+      .then((response: AxiosResponse<TodoResponse[]>) => {
+        const todosData = response.data;
+        setTodos(todosData)
       })
-      .catch(error => console.error('Error fetching todos from the database:', error));
+      .catch(error => console.error('Error fetching todos from the database:', error))
   }, []);
 
+
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (input.trim() !== '') {
       const existedTodo = todos.find((todo) => todo.text === input)
 
       if (existedTodo) {
-        openToast('Todo already exists! Fulfill it now?!')
+        openToast('Todo already exists! Fulfill it now?!');
       } else {
         const randomColor = generateRandomColor();
-        const newTodo = { id: Date.now().toString(), text: input, color: randomColor, completed: false, location: '', member: [], time: '' }
+        const newTodo = { id: Date.now().toString(), text: input, color: randomColor, completed: false, location: '', member: [], time: '' };
 
-        axios.post(`${baseUrl}`, newTodo)
-          .then((response) => {
+        axios.post<TodoResponse>(`${baseUrl}`, newTodo)
+          .then((response: AxiosResponse<TodoResponse>) => {
             const createdTodo: Todo = response.data;
             setTodos([...todos, createdTodo]);
           })
-          .catch(error => console.error('Error saving todo to database:', error))
+          .catch(error => console.error('Error saving todo to database:', error));
       }
-      setInput('')
+      setInput('');
     } else {
-      openToast('Todo is invalid: Please enter a non-empty string!!')
+      openToast('Todo is invalid: Please enter a non-empty string!!');
     }
 
-  }
+  };
 
   const handleEdit = (todo: Todo) => {
-    setIsOpenModal(true)
+    setIsOpenModal(true);
     setEditTodo({
       ...todo
-    })
-  }
+    });
+  };
 
   const handleSaveEditTodo = (text: string) => {
     const updatedTodo = { ...editTodo, text: text };
 
-    axios.put(`${baseUrl}/${editTodo.id}`, updatedTodo)
+    axios.put<TodoResponse>(`${baseUrl}/${editTodo.id}`, updatedTodo)
       .then(() => {
         const updatedTodos: Todo[] = todos.map((todo) =>
           todo.id === editTodo.id ? { ...todo, text: text } : todo
         );
-        setTodos(updatedTodos)
-        setIsOpenModal(false)
+        setTodos(updatedTodos);
+        setIsOpenModal(false);
       })
-      .catch(error => console.error('Error updating todo:', error))
-  }
+      .catch(error => console.error('Error updating todo:', error));
+  };
 
 
   const handleDelete = (id: string) => {
@@ -85,23 +111,18 @@ const HomePage = () => {
       })
       .catch(error => {
         console.error(`Error deleting todo with ID ${id} from the database:`, error)
-      })
+      });
   };
 
 
   const handleCheck = (id: string, completed: boolean) => {
     const currentTodo = todos.find((todo) => todo.id === id);
     const updateCurrentTodo = { 
-      id: id,
-      text: currentTodo?.text,
-      color: currentTodo?.color,
+      ...currentTodo,
       completed: !completed,
-      location: currentTodo?.location,
-      member: currentTodo?.member,
-      time: currentTodo?.time
     };
   
-    axios.put(`${baseUrl}/${id}`, updateCurrentTodo)
+    axios.put<TodoResponse>(`${baseUrl}/${id}`, updateCurrentTodo)
       .then(() => {
         const updatedTodos: Todo[] = todos.map((todo) =>
           todo.id === id ? { ...todo, completed: !completed } : todo
@@ -115,15 +136,13 @@ const HomePage = () => {
   
 
   const openToast = (message: string) => {
-    setIsOpenToast(true)
-    setToastMessage(message)
-  }
+    setIsOpenToast(true);
+    setToastMessage(message);
+  };
 
   const closeToast = () => {
-    setIsOpenToast(false)
-  }
-
-
+    setIsOpenToast(false);
+  };
 
   return (
     <Container disableGutters maxWidth={false}
@@ -170,7 +189,7 @@ const HomePage = () => {
         />
       </Box>
     </Container>
-  )
+  );
 }
 
-export default HomePage
+export default HomePage;
