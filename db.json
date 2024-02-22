@@ -4,12 +4,9 @@
       "id": "1",
       "text": "Shopping",
       "color": "#B2DBBF",
-      "completed": false,
+      "completed": true,
       "location": "Grocery Store",
-      "members": [
-        "John",
-        "Alice"
-      ],
+      "members": "John,Alice",
       "time": "09:00 AM"
     },
     {

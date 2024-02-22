@@ -55,7 +55,7 @@ const DetailPage = () => {
         setSelectedTodo(selectedTodoData)
 
         const initialFieldValues: { [key: string]: string } = {};
-        Object.entries(selectedTodoData || {}).forEach(([fieldName, fieldValue]) => {
+        Object.entries(selectedTodoData || {} ).forEach(([fieldName, fieldValue]) => {
           initialFieldValues[fieldName] = fieldValue?.toString() || ''
         })
         setFieldValues(initialFieldValues)
